@@ -11,7 +11,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 #from utils import load_pretrained
 from models.Compund_DCT import CompundDCT_Conv
-from models.SCFfilter import SCFConv2d
+from models.SCFilter import SCFConv2d
 import torch
 
 
