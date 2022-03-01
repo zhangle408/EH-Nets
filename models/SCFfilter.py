@@ -1,3 +1,11 @@
+"""
+    Shared Combinational Filters Definition.
+
+    Licensed under the BSD License [see LICENSE for details].
+
+    Written by Yao Lu
+"""
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -32,10 +40,10 @@ def select_filter(n_lego, drop_filter_stage, last_rate, fre_num, lego_filter):
             mask_index = entropy_list.le(clamp_max)
             mask[i][mask_index] = 0.
     return mask
-class LegoConv2d(nn.Module):
+class SCFConv2d(nn.Module):
     drop_filter_stage=0
     def __init__(self, in_channels, out_channels, bais, kernel_size,  n_lego, fre_num, last_rate, balance_weight):
-        super(LegoConv2d, self).__init__()
+        super(SCFConv2d, self).__init__()
         self.in_channels, self.out_channels, self.kernel_size, self.fre_num = in_channels, out_channels, kernel_size, fre_num
         self.basic_channels = in_channels // self.fre_num
         self.n_lego = int(self.out_channels * n_lego)
@@ -49,7 +57,7 @@ class LegoConv2d(nn.Module):
     def forward(self, x):
         avg_freq = (self.fre_num * self.out_channels ) / self.n_lego
         self.proxy_combination=DiscreteFunction.apply(self.aux_combination, self.balance_weight, avg_freq, self.n_lego)
-        mask = select_filter(self.n_lego, LegoConv2d.drop_filter_stage, self.last_rate, self.fre_num, self.lego)#[K^2,m,1,1,1]
+        mask = select_filter(self.n_lego, SCFConv2d.drop_filter_stage, self.last_rate, self.fre_num, self.lego)#[K^2,m,1,1,1]
         filter_3d=(self.lego).view(self.n_lego, self.basic_channels, 1, self.kernel_size, self.kernel_size)#(m,N,1,3,3)
         out=F.conv3d(x,filter_3d,padding=(0,self.kernel_size // 2,self.kernel_size // 2)) #output:B,m,K^2,W,H
         out=out*(mask.permute(4,1,0,2,3).contiguous())
