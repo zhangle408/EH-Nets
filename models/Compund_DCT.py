@@ -13,7 +13,7 @@ import math
 import numpy as np
 import torch.nn.init as init
 import torchvision
-from models.Legofilter import LegoConv2d
+from models.SCFfilter import SCFConv2d
 
 
 def shuffle_channel(x, ni):
@@ -113,8 +113,8 @@ class CompundDCT_Conv(nn.Module):
         nf = self.compund_dct.shape[0] // ni if use_bn else self.compund_dct.shape[1]
         if use_bn:
             self.bn = nn.BatchNorm2d(ni*nf)
-            self.linear_DCT = LegoConv2d(in_channels=ni*nf, out_channels=no,bais=bias, kernel_size=1,  n_lego=(1./groups), fre_num=nf, last_rate=last_rate,  balance_weight= balance_weight)
-            #self.linear_DCT = LegoConv2d(in_channels=ni*nf, out_channels=no,bais=bias, kernel_size=1,  n_lego=groups, fre_num=nf, last_rate=last_rate,  balance_weight= balance_weight)
+            self.linear_DCT = SCFConv2d(in_channels=ni*nf, out_channels=no,bais=bias, kernel_size=1,  n_lego=(1./groups), fre_num=nf, last_rate=last_rate,  balance_weight= balance_weight)
+            #self.linear_DCT = SCFConv2d(in_channels=ni*nf, out_channels=no,bais=bias, kernel_size=1,  n_lego=groups, fre_num=nf, last_rate=last_rate,  balance_weight= balance_weight)
             #self.weight = nn.Parameter(nn.init.kaiming_normal_(torch.Tensor(no, ni // self.groups * nf, 1, 1), mode='fan_out', nonlinearity='relu'))
         else:
             self.weight = nn.Parameter(nn.init.kaiming_normal_(torch.Tensor(no, ni // self.groups, nf, 1, 1), mode='fan_out', nonlinearity='relu'))
@@ -127,8 +127,8 @@ class CompundDCT_Conv(nn.Module):
             return x
         else:
             #print(self.groups)
-            LegoConv2d.drop_filter_stage=CompundDCT_Conv.drop_filter_stage
-            #LegoConv2d.weight_list=CompundDCT_Conv.weight_list
+            SCFConv2d.drop_filter_stage=CompundDCT_Conv.drop_filter_stage
+            #SCFConv2d.weight_list=CompundDCT_Conv.weight_list
             x = F.conv2d(x, self.compund_dct, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=x.size(1))
             
             x = self.bn(x)
