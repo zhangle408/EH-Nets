@@ -11,7 +11,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 #from utils import load_pretrained
 from models.Compund_DCT import CompundDCT_Conv
-from models.Legofilter import LegoConv2d
+from models.SCF import SCFConv2d
 import torch
 
 
@@ -91,7 +91,7 @@ class Bottleneck(nn.Module):
         super(Bottleneck, self).__init__()
         # Both self.conv2 and self.downsample layers downsample the input when stride != 1
         #self.conv1 = conv1x1(inplanes, planes)
-        self.conv1 = LegoConv2d( in_channels=inplanes, out_channels=planes,bais=False, kernel_size=1,  n_lego=0.5, fre_num=2, last_rate=1.,balance_weight= balance_weight)
+        self.conv1 = SCFConv2d( in_channels=inplanes, out_channels=planes,bais=False, kernel_size=1,  n_lego=0.5, fre_num=2, last_rate=1.,balance_weight= balance_weight)
         self.bn1 = nn.BatchNorm2d(planes)
         if DCT_flag:
             self.CompundDCT_Conv2 = CompundDCT_Conv3x3(planes, planes, stride, compund_level=compund_level, level=level, groups=groups, last_rate=last_rate,  balance_weight= balance_weight)
@@ -99,7 +99,7 @@ class Bottleneck(nn.Module):
             self.conv2 = conv3x3(planes, planes, stride)
         self.bn2 = nn.BatchNorm2d(planes)
         #self.conv3 = conv1x1(planes, planes * self.expansion)
-        self.conv3 = LegoConv2d( in_channels=planes, out_channels=planes* self.expansion,bais=False, kernel_size=1,  n_lego=0.5, fre_num=2, last_rate=1.,balance_weight= balance_weight)
+        self.conv3 = SCFConv2d( in_channels=planes, out_channels=planes* self.expansion,bais=False, kernel_size=1,  n_lego=0.5, fre_num=2, last_rate=1.,balance_weight= balance_weight)
         self.bn3 = nn.BatchNorm2d(planes * self.expansion)
         self.relu = nn.ReLU(inplace=True)
         self.downsample = downsample
@@ -236,7 +236,7 @@ class ResNet(nn.Module):
 
     def copy_grad(self, balance_weight):
         for layer in self.modules():
-            if isinstance(layer, LegoConv2d):
+            if isinstance(layer, SCFConv2d):
                 layer.copy_grad(balance_weight)
 
 def resnet18(pretrained=False, **kwargs):
