@@ -13,7 +13,7 @@ import math
 import numpy as np
 import torch.nn.init as init
 import torchvision
-from models.SCFfilter import SCFConv2d
+from models.SCFilter import SCFConv2d
 
 
 def shuffle_channel(x, ni):
