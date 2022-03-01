@@ -7,4 +7,8 @@ This code was developed and tested with Python3.6, Pytorch 1.5 and CUDA 10.2 on 
 # Train EH-Nets on Cifar datasets 
 You are able to run the provided demo code.
 
-'''sh train_cifar.sh'''
+'''
+mkdir logs
+
+sh train_cifar.sh
+'''
