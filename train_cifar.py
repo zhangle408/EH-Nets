@@ -57,7 +57,7 @@ parser.add_argument('--weight_decay', default=1e-4, type=float,
 parser.add_argument('--resume', default=False, action='store_true', help='resume from checkpoint')
 parser.add_argument('--depth', default=56, type=int,
                     help='depth of PyramidNe ')
-parser.add_argument('--groups_list', type = list, default = [2,2,2]) #1./n_lego
+parser.add_argument('--groups_list', type = list, default = [2,2,2]) #1./n_sc
 parser.add_argument('--levels', type = list, default = [None,None,None])
 parser.add_argument('--compund_level', type = int, default = None) #args.compund_level
 parser.add_argument('--last_rates', type = list, default = [1.,1.,1.])
