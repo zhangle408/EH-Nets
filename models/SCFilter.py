@@ -25,13 +25,13 @@ def entropy_filter(x):
     abs_sum=x.abs().sum(dim=[1,2,3]).view(-1)
     return abs_sum
 
-def select_filter(n_sc, drop_filter_stage, last_rate, fre_num, lego_filter):
+def select_filter(n_sc, drop_filter_stage, last_rate, fre_num, sc_filter):
     assert drop_filter_stage<=2
     new_last_rate=1.-(((1.-last_rate)/2)*drop_filter_stage)
     preserve_rate=[1.-(((1.-new_last_rate)/(fre_num-1))*i) for i in range(fre_num)]
-    mask=torch.FloatTensor(np.ones((fre_num, n_sc,1,1,1), dtype=np.float32)).to(lego_filter.device)
-    lego_filter_detach=lego_filter.detach()
-    entropy_list=entropy_filter(lego_filter_detach)
+    mask=torch.FloatTensor(np.ones((fre_num, n_sc,1,1,1), dtype=np.float32)).to(sc_filter.device)
+    sc_filter_detach=sc_filter.detach()
+    entropy_list=entropy_filter(sc_filter_detach)
     for i in range(fre_num):
         drop_filter=int((1.-preserve_rate[i])*n_sc)
         if drop_filter>0:
