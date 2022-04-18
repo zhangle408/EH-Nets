@@ -152,8 +152,7 @@ def main():
         start_epoch = args.start_epoch
 
 
-    print('Number of model parameters: {}'.format(
-        sum([p.data.nelement() for p in model.parameters() if p.requires_grad and len(p.data.size())<5])))
+    
     
     # Use GPUs if available.
     if torch.cuda.is_available():
