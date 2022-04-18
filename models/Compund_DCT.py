@@ -113,7 +113,7 @@ class CompundDCT_Conv(nn.Module):
         nf = self.compund_dct.shape[0] // ni if use_bn else self.compund_dct.shape[1]
         if use_bn:
             self.bn = nn.BatchNorm2d(ni*nf)
-            self.linear_DCT = SCFConv2d(in_channels=ni*nf, out_channels=no,bais=bias, kernel_size=1,  n_lego=(1./groups), fre_num=nf, last_rate=last_rate,  balance_weight= balance_weight)
+            self.linear_DCT = SCFConv2d(in_channels=ni*nf, out_channels=no,bais=bias, kernel_size=1,  n_sc=(1./groups), fre_num=nf, last_rate=last_rate,  balance_weight= balance_weight)
             #self.linear_DCT = SCFConv2d(in_channels=ni*nf, out_channels=no,bais=bias, kernel_size=1,  n_lego=groups, fre_num=nf, last_rate=last_rate,  balance_weight= balance_weight)
             #self.weight = nn.Parameter(nn.init.kaiming_normal_(torch.Tensor(no, ni // self.groups * nf, 1, 1), mode='fan_out', nonlinearity='relu'))
         else:
