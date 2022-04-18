@@ -114,27 +114,26 @@ class CompundDCT_Conv(nn.Module):
         if use_bn:
             self.bn = nn.BatchNorm2d(ni*nf)
             self.linear_DCT = SCFConv2d(in_channels=ni*nf, out_channels=no,bais=bias, kernel_size=1,  n_sc=(1./groups), fre_num=nf, last_rate=last_rate,  balance_weight= balance_weight)
-            #self.linear_DCT = SCFConv2d(in_channels=ni*nf, out_channels=no,bais=bias, kernel_size=1,  n_lego=groups, fre_num=nf, last_rate=last_rate,  balance_weight= balance_weight)
-            #self.weight = nn.Parameter(nn.init.kaiming_normal_(torch.Tensor(no, ni // self.groups * nf, 1, 1), mode='fan_out', nonlinearity='relu'))
+            
         else:
             self.weight = nn.Parameter(nn.init.kaiming_normal_(torch.Tensor(no, ni // self.groups, nf, 1, 1), mode='fan_out', nonlinearity='relu'))
         self.bias =  None
-        #print(self.compund_dct.shape)
+        
     def forward(self, x):
         if not hasattr(self, 'bn'):
             filt = torch.sum(self.weight * self.compund_dct, dim=2)
             x = F.conv2d(x, filt, bias=self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups)
             return x
         else:
-            #print(self.groups)
+            
             SCFConv2d.drop_filter_stage=CompundDCT_Conv.drop_filter_stage
-            #SCFConv2d.weight_list=CompundDCT_Conv.weight_list
+            
             x = F.conv2d(x, self.compund_dct, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=x.size(1))
             
             x = self.bn(x)
-            #x = shuffle_channel(x, self.ni)
+            
             x = x.view(x.size(0), self.ni, x.size(1)//self.ni, x.size(2), x.size(3)) #use conv3d 
-            #print(x.size(),self.ni,self.compund_dct.shape)
+            
             x = self.linear_DCT(x)
             return x
 
