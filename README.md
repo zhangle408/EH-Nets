@@ -12,3 +12,13 @@ mkdir logs
 
 sh train_cifar.sh
 '''
+# If you found our research helpful or influential please consider citing
+@ARTICLE{9783450,
+  author={Lu, Yao and Zhang, Le and Yang, Xiaofei and Zhou, Yicong},
+  journal={IEEE Transactions on Neural Networks and Learning Systems}, 
+  title={Efficient Harmonic Neural Networks With Compound Discrete Cosine Transform Filters and Shared Reconstruction Filters}, 
+  year={2022},
+  volume={},
+  number={},
+  pages={1-15},
+  doi={10.1109/TNNLS.2022.3176611}}
