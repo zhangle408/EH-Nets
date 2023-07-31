@@ -12,7 +12,9 @@ mkdir logs
 
 sh train_cifar.sh
 '''
-# If you found our research helpful or influential please consider citing
+# Citing
+If you found our research helpful or influential please consider citing
+
 @ARTICLE{9783450,
   author={Lu, Yao and Zhang, Le and Yang, Xiaofei and Zhou, Yicong},
   journal={IEEE Transactions on Neural Networks and Learning Systems}, 
