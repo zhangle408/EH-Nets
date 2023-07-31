@@ -12,7 +12,7 @@ mkdir logs
 
 sh train_cifar.sh
 '''
-###BibTeX
+### BibTeX
 If you found our research helpful or influential please consider citing
 
 @ARTICLE{9783450,
